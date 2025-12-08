@@ -1,10 +1,29 @@
+using LibraryApi.Domain.Common;
+
 namespace LibraryApi.Domain.Entities;
 
-public class Author
+/// <summary>
+/// Represents an author of books in the library.
+/// </summary>
+public class Author : BaseEntity
 {
-    public int Id { get; set; }
+    /// <summary>
+    /// The author's full name.
+    /// </summary>
     public required string Name { get; set; }
+
+    /// <summary>
+    /// Contact email for the author (optional).
+    /// </summary>
     public string? Email { get; set; }
+
+    /// <summary>
+    /// The author's date of birth (date component is used).
+    /// </summary>
     public DateTime BirthDate { get; set; }
-    public ICollection<Book> Books { get; set; } = new List<Book>();
+
+    /// <summary>
+    /// Navigation collection of books written by the author.
+    /// </summary>
+    public ICollection<Book> Books { get; set; } = [];
 }
