@@ -34,26 +34,36 @@ namespace LibraryApi.Application.Books.Services
 		/// <inheritdoc/>
 		public async Task<BookDto> CreateBookAsync(CreateBookDto createBookDto)
 		{
-			var book = createBookDto.ToEntity();
-			var createdBook = await bookRepository.AddAsync(book);
-			return createdBook.ToDto();
+			if (createBookDto is null)
+				throw new ArgumentNullException(nameof(createBookDto));
+			var bookEntity = BookMapper.ToEntity(createBookDto);
+			var resultBook = await bookRepository.AddAsync(bookEntity);
+			return resultBook.ToDto();
 		}
 
 		/// <inheritdoc/>
-		public async Task<BookDto> UpdateBookAsync(int id, UpdateBookDto updateBookDto)
+		public async Task<BookDto?> UpdateBookAsync(int id, UpdateBookDto updateBookDto)
 		{
+			if (updateBookDto is null)
+				throw new ArgumentNullException(nameof(updateBookDto));
+
 			var existingBook = await bookRepository.GetByIdAsync(id);
 			if (existingBook is null)
-				throw new KeyNotFoundException($"Book with ID {id} not found.");
+				return null;
+
 			BookMapper.UpdateEntity(updateBookDto, existingBook);
 			var resultBook = await bookRepository.UpdateAsync(existingBook);
 			return resultBook.ToDto();
 		}
 
 		/// <inheritdoc/>
-		public Task<bool> DeleteBookAsync(int id)
+		public async Task<bool> DeleteBookAsync(int id)
 		{
-			throw new NotImplementedException();
+			var existingBook = await bookRepository.GetByIdAsync(id);
+			if (existingBook is null)
+				return false;
+			await bookRepository.DeleteAsync(existingBook);
+			return true;
 		}
 
 		/// <inheritdoc/>
