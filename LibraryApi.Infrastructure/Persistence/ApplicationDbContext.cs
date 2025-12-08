@@ -1,4 +1,5 @@
-﻿using LibraryApi.Domain.Entities;
+﻿using LibraryApi.Domain.Common;
+using LibraryApi.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Infrastructure.Persistence;
@@ -32,10 +33,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 			entity.Property(e => e.ISBN)
 				.HasMaxLength(20);
 			entity.HasIndex(e => e.ISBN)
-				.IsUnique(); // Ensure ISBN is unique
+				.IsUnique()
+				.HasFilter("[ISBN] IS NOT NULL"); // Allow multiple nulls for ISBN
 			entity.HasIndex(e => e.Title);
 			entity.Property(e => e.PublishedDate)
 				.HasColumnType("date"); // Store only the date part
+			entity.Property(e => e.CreatedAt)
+				.IsRequired();
+			entity.Property(e => e.UpdatedAt);
 			entity.HasOne(e => e.Author)
 				.WithMany(a => a.Books)
 				.HasForeignKey(e => e.AuthorId)
@@ -52,6 +57,38 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 				.HasMaxLength(100);
 			entity.Property(e => e.BirthDate)
 				.HasColumnType("date");
+			entity.Property(e => e.CreatedAt)
+				.IsRequired();
+			entity.Property(e => e.UpdatedAt);
 		});
+	}
+
+	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+	{
+		SetAuditProperties();
+		return base.SaveChangesAsync(cancellationToken);
+	}
+
+	public override int SaveChanges()
+	{
+		SetAuditProperties();
+		return base.SaveChanges();
+	}
+
+	private void SetAuditProperties()
+	{
+		var entries = ChangeTracker.Entries<BaseEntity>();
+
+		foreach (var entry in entries)
+		{
+			if (entry.State == EntityState.Added)
+			{
+				entry.Entity.CreatedAt = DateTime.UtcNow;
+			}
+			else if (entry.State == EntityState.Modified)
+			{
+				entry.Entity.UpdatedAt = DateTime.UtcNow;
+			}
+		}
 	}
 }
