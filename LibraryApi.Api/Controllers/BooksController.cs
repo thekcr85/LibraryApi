@@ -27,5 +27,13 @@ namespace LibraryApi.Api.Controllers
 				return NotFound();
 			return Ok(book);
 		}
+
+		[HttpPost]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		public async Task<ActionResult<BookDto>> CreateBook([FromBody] CreateBookDto createBookDto)
+		{
+			var createdBook = await bookService.CreateBookAsync(createBookDto);
+			return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);
+		}
 	}
 }
