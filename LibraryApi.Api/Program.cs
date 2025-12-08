@@ -1,22 +1,17 @@
-using LibraryApi.Application.Books.Interfaces.Repositories;
-using LibraryApi.Infrastructure.Persistence;
-using LibraryApi.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+using LibraryApi.Application.DependencyInjection;
+using LibraryApi.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+// Add OpenAPI support
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext <ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-builder.Services.AddScoped<IBookRepository, BookRepository>();
+// Add Infrastructure and Application layers
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
