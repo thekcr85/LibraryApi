@@ -1,4 +1,5 @@
-﻿using LibraryApi.Application.Books.Interfaces.Services;
+﻿using LibraryApi.Application.Books.Dtos;
+using LibraryApi.Application.Books.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace LibraryApi.Api.Controllers
 		[HttpGet("{id:int}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetBookById(int id)
+		public async Task<ActionResult<BookDto>> GetBookById(int id)
 		{
 			var book = await bookService.GetBookByIdAsync(id);
 			if (book is null)
