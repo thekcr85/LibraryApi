@@ -7,8 +7,6 @@ namespace LibraryApi.Infrastructure.Repositories;
 
 public class BookRepository(ApplicationDbContext applicationDbContext) : IBookRepository
 {
-	private readonly ApplicationDbContext _db = applicationDbContext;
-
 	/// <inheritdoc/>
 	public async Task<IReadOnlyList<Book>> GetAllAsync()
 	{
