@@ -40,9 +40,14 @@ namespace LibraryApi.Application.Books.Services
 		}
 
 		/// <inheritdoc/>
-		public Task<BookDto> UpdateBookAsync(int id, UpdateBookDto updateBookDto)
+		public async Task<BookDto> UpdateBookAsync(int id, UpdateBookDto updateBookDto)
 		{
-			throw new NotImplementedException();
+			var existingBook = await bookRepository.GetByIdAsync(id);
+			if (existingBook is null)
+				throw new KeyNotFoundException($"Book with ID {id} not found.");
+			BookMapper.UpdateEntity(updateBookDto, existingBook);
+			var resultBook = await bookRepository.UpdateAsync(existingBook);
+			return resultBook.ToDto();
 		}
 
 		/// <inheritdoc/>
