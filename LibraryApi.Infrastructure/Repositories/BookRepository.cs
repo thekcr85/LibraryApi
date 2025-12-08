@@ -1,57 +1,96 @@
 ﻿using LibraryApi.Application.Interfaces.Repositories;
 using LibraryApi.Domain.Entities;
+using LibraryApi.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Infrastructure.Repositories;
 
-public class BookRepository : IBookRepository
+public class BookRepository(ApplicationDbContext applicationDbContext) : IBookRepository
 {
-	public Task<IReadOnlyList<Book>> GetAllAsync()
+	private readonly ApplicationDbContext _db = applicationDbContext;
+
+	/// <inheritdoc/>
+	public async Task<IReadOnlyList<Book>> GetAllAsync()
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books.ToListAsync();
 	}
 
-	public Task<Book?> GetByIdAsync(int id)
+	/// <inheritdoc/>
+	public async Task<Book?> GetByIdAsync(int id)
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books.FindAsync(id);
 	}
 
-	public Task<Book> AddAsync(Book book)
+	/// <inheritdoc/>
+	public async Task<Book> AddAsync(Book book)
 	{
-		throw new NotImplementedException();
+		applicationDbContext.Books.Add(book);
+		await applicationDbContext.SaveChangesAsync();
+		return book;
 	}
 
-	public Task<Book> UpdateAsync(Book book)
+	/// <inheritdoc/>
+	public async Task<Book> UpdateAsync(Book book)
 	{
-		throw new NotImplementedException();
+		var existingBook = await applicationDbContext.Books.FindAsync(book.Id);
+		if (existingBook == null)
+		{
+			throw new KeyNotFoundException($"Book with ID {book.Id} not found.");
+		}
+		applicationDbContext.Entry(existingBook).CurrentValues.SetValues(book);
+		await applicationDbContext.SaveChangesAsync();
+		return existingBook;
 	}
 
-	public Task<bool> DeleteAsync(int id)
+	/// <inheritdoc/>
+	public async Task<bool> DeleteAsync(int id)
 	{
-		throw new NotImplementedException();
+		var existingBook = await applicationDbContext.Books.FindAsync(id);
+		if (existingBook == null)
+		{
+			return false;
+		}
+		applicationDbContext.Books.Remove(existingBook);
+		await applicationDbContext.SaveChangesAsync();
+		return true;
 	}
 
-	public Task<Book?> GetByIsbnAsync(string isbn)
+	/// <inheritdoc/>
+	public async Task<Book?> GetByIsbnAsync(string isbn)
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books.FirstOrDefaultAsync(b => b.ISBN == isbn);
 	}
 
-	public Task<IReadOnlyList<Book>> GetByAuthorAsync(int authorId)
+	/// <inheritdoc/>
+	public async Task<IReadOnlyList<Book>> GetByAuthorAsync(int authorId)
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books
+			.Where(b => b.AuthorId == authorId)
+			.ToListAsync();
 	}
 
-	public Task<IReadOnlyList<Book>> SearchByTitleAsync(string titleFragment)
+	/// <inheritdoc/>
+	public async Task<IReadOnlyList<Book>> SearchByTitleAsync(string titleFragment)
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books
+			.Where(b => b.Title.Contains(titleFragment))
+			.ToListAsync();
 	}
 
-	public Task<IReadOnlyList<Book>> GetByPublicationYearAsync(int year)
+	/// <inheritdoc/>
+	public async Task<IReadOnlyList<Book>> GetByPublicationYearAsync(int year)
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books
+			.Where(b => b.PublishedDate.Year == year)
+			.ToListAsync();
 	}
 
-	public Task<IReadOnlyList<Book>> GetRecent(int count)
+	/// <inheritdoc/>
+	public async Task<IReadOnlyList<Book>> GetRecent(int count)
 	{
-		throw new NotImplementedException();
+		return await applicationDbContext.Books
+			.OrderByDescending(b => b.PublishedDate)
+			.Take(count) // Take the most recent 'count' books
+			.ToListAsync();
 	}
 }
