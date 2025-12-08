@@ -1,12 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace LibraryApi.Application.Books.Dtos;
 
 /// <summary>
 /// DTO used when creating a new book.
 /// </summary>
 public record CreateBookDto(
-    string Title,
+    [Required, StringLength(100)] string Title,
     string? Description,
-    string? ISBN,
-    DateTime PublishedDate,
+    [StringLength(20)] string? ISBN,
+    [DataType(DataType.Date)] DateTime PublishedDate,
     int AuthorId
 );

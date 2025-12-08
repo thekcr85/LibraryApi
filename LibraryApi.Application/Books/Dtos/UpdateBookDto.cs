@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace LibraryApi.Application.Books.Dtos;
 
 /// <summary>
@@ -5,9 +7,9 @@ namespace LibraryApi.Application.Books.Dtos;
 /// </summary>
 public record UpdateBookDto(
     int Id,
-    string Title,
+    [Required, StringLength(100)] string Title,
     string? Description,
-    string? ISBN,
-    DateTime PublishedDate,
+    [StringLength(20)] string? ISBN,
+    [DataType(DataType.Date)] DateTime PublishedDate,
     int AuthorId
 );
