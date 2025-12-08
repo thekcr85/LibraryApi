@@ -41,16 +41,10 @@ public class BookRepository(ApplicationDbContext applicationDbContext) : IBookRe
 	}
 
 	/// <inheritdoc/>
-	public async Task<bool> DeleteAsync(int id)
-	{
-		var existingBook = await applicationDbContext.Books.FindAsync(id);
-		if (existingBook == null)
-		{
-			return false;
-		}
-		applicationDbContext.Books.Remove(existingBook);
+	public async Task DeleteAsync(Book book)
+	{ 
+		applicationDbContext.Books.Remove(book);
 		await applicationDbContext.SaveChangesAsync();
-		return true;
 	}
 
 	/// <inheritdoc/>
