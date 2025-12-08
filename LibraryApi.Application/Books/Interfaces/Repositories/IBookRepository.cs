@@ -37,11 +37,11 @@ public interface IBookRepository
 	Task<Book> UpdateAsync(Book book);
 
 	/// <summary>
-	/// Deletes a book by its identifier.
+	/// Deletes the specified book.
 	/// </summary>
-	/// <param name="id">The book identifier.</param>
-	/// <returns><c>true</c> if the book was deleted; otherwise <c>false</c>.</returns>
-	Task<bool> DeleteAsync(int id);
+	/// <param name="book">The book to delete. Cannot be null.</param>
+	/// <returns>A task that represents the asynchronous delete operation.</returns>
+	Task DeleteAsync(Book book);
 
 	// Additional methods
 
