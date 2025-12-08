@@ -1,4 +1,4 @@
-using LibraryApi.Application.Interfaces.Repositories;
+using LibraryApi.Application.Books.Interfaces.Repositories;
 using LibraryApi.Infrastructure.Persistence;
 using LibraryApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
