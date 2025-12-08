@@ -25,7 +25,7 @@ public interface IBookService
 	/// <summary>
 	/// Updates an existing book.
 	/// </summary>
-	Task<BookDto> UpdateBookAsync(int id, UpdateBookDto updateBookDto);
+	Task<BookDto?> UpdateBookAsync(int id, UpdateBookDto updateBookDto);
 
 	/// <summary>
 	/// Deletes a book by its identifier.
