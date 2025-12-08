@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LibraryApi.Application\LibraryApi.Application.csproj" />
     <ProjectReference Include="..\LibraryApi.Domain\LibraryApi.Domain.csproj" />
   </ItemGroup>
 
