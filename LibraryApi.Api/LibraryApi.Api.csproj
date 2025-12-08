@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LibraryApi.Application\LibraryApi.Application.csproj" />
     <ProjectReference Include="..\LibraryApi.Infrastructure\LibraryApi.Infrastructure.csproj" />
   </ItemGroup>
