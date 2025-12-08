@@ -5,6 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApi.Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing <see cref="Book"/> entities.
+/// </summary>
+/// <remarks>All methods are asynchronous. Not thread-safe.</remarks>
+/// <param name="applicationDbContext">EF Core <see cref="ApplicationDbContext"/> instance.</param>
 public class BookRepository(ApplicationDbContext applicationDbContext) : IBookRepository
 {
 	/// <inheritdoc/>
