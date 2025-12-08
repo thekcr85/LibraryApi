@@ -32,9 +32,11 @@ namespace LibraryApi.Application.Books.Services
 		}
 
 		/// <inheritdoc/>
-		public Task<BookDto> CreateBookAsync(CreateBookDto createBookDto)
+		public async Task<BookDto> CreateBookAsync(CreateBookDto createBookDto)
 		{
-			throw new NotImplementedException();
+			var book = createBookDto.ToEntity();
+			var createdBook = await bookRepository.AddAsync(book);
+			return createdBook.ToDto();
 		}
 
 		/// <inheritdoc/>
