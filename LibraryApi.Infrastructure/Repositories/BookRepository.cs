@@ -13,76 +13,87 @@ namespace LibraryApi.Infrastructure.Repositories;
 public class BookRepository(ApplicationDbContext applicationDbContext) : IBookRepository
 {
 	/// <inheritdoc/>
-	public async Task<IReadOnlyList<Book>> GetAllAsync()
+	public async Task<IReadOnlyList<Book>> GetAllAsync(CancellationToken cancellationToken = default)
 	{
-		return await applicationDbContext.Books.ToListAsync();
+		return await applicationDbContext.Books
+			.AsNoTracking()
+			.ToListAsync(cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public async Task<Book?> GetByIdAsync(int id)
+	public async Task<Book?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
 	{
-		return await applicationDbContext.Books.FindAsync(id);
+		return await applicationDbContext.Books
+			.FindAsync([id], cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public async Task<Book> AddAsync(Book book)
+	public async Task<Book> AddAsync(Book book, CancellationToken cancellationToken = default)
 	{
+		book.CreatedAt = DateTime.UtcNow;
 		applicationDbContext.Books.Add(book);
-		await applicationDbContext.SaveChangesAsync();
+		await applicationDbContext.SaveChangesAsync(cancellationToken);
 		return book;
 	}
 
 	/// <inheritdoc/>
-	public async Task<Book> UpdateAsync(Book book)
+	public async Task<Book> UpdateAsync(Book book, CancellationToken cancellationToken = default)
 	{
+		book.UpdatedAt = DateTime.UtcNow;
 		applicationDbContext.Books.Update(book);
-		await applicationDbContext.SaveChangesAsync();
+		await applicationDbContext.SaveChangesAsync(cancellationToken);
 		return book;
 	}
 
 	/// <inheritdoc/>
-	public async Task DeleteAsync(Book book)
+	public async Task DeleteAsync(Book book, CancellationToken cancellationToken = default)
 	{ 
 		applicationDbContext.Books.Remove(book);
-		await applicationDbContext.SaveChangesAsync();
+		await applicationDbContext.SaveChangesAsync(cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public async Task<Book?> GetByIsbnAsync(string isbn)
-	{
-		return await applicationDbContext.Books.FirstOrDefaultAsync(b => b.ISBN == isbn);
-	}
-
-	/// <inheritdoc/>
-	public async Task<IReadOnlyList<Book>> GetByAuthorAsync(int authorId)
+	public async Task<Book?> GetByIsbnAsync(string isbn, CancellationToken cancellationToken = default)
 	{
 		return await applicationDbContext.Books
+			.AsNoTracking()
+			.FirstOrDefaultAsync(b => b.ISBN == isbn, cancellationToken);
+	}
+
+	/// <inheritdoc/>
+	public async Task<IReadOnlyList<Book>> GetByAuthorAsync(int authorId, CancellationToken cancellationToken = default)
+	{
+		return await applicationDbContext.Books
+			.AsNoTracking()
 			.Where(b => b.AuthorId == authorId)
-			.ToListAsync();
+			.ToListAsync(cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public async Task<IReadOnlyList<Book>> SearchByTitleAsync(string titleFragment)
+	public async Task<IReadOnlyList<Book>> SearchByTitleAsync(string titleFragment, CancellationToken cancellationToken = default)
 	{
 		return await applicationDbContext.Books
-			.Where(b => b.Title.Contains(titleFragment))
-			.ToListAsync();
+			.AsNoTracking()
+			.Where(b => EF.Functions.Like(b.Title, $"%{titleFragment}%"))
+			.ToListAsync(cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public async Task<IReadOnlyList<Book>> GetByPublicationYearAsync(int year)
+	public async Task<IReadOnlyList<Book>> GetByPublicationYearAsync(int year, CancellationToken cancellationToken = default)
 	{
 		return await applicationDbContext.Books
+			.AsNoTracking()
 			.Where(b => b.PublishedDate.Year == year)
-			.ToListAsync();
+			.ToListAsync(cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public async Task<IReadOnlyList<Book>> GetRecent(int count)
+	public async Task<IReadOnlyList<Book>> GetRecentAsync(int count, CancellationToken cancellationToken = default)
 	{
 		return await applicationDbContext.Books
+			.AsNoTracking()
 			.OrderByDescending(b => b.PublishedDate)
-			.Take(count) // Take the most recent 'count' books
-			.ToListAsync();
+			.Take(count)
+			.ToListAsync(cancellationToken);
 	}
 }
