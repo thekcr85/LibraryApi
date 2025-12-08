@@ -35,14 +35,9 @@ public class BookRepository(ApplicationDbContext applicationDbContext) : IBookRe
 	/// <inheritdoc/>
 	public async Task<Book> UpdateAsync(Book book)
 	{
-		var existingBook = await applicationDbContext.Books.FindAsync(book.Id);
-		if (existingBook == null)
-		{
-			throw new KeyNotFoundException($"Book with ID {book.Id} not found.");
-		}
-		applicationDbContext.Entry(existingBook).CurrentValues.SetValues(book);
+		applicationDbContext.Books.Update(book);
 		await applicationDbContext.SaveChangesAsync();
-		return existingBook;
+		return book;
 	}
 
 	/// <inheritdoc/>
