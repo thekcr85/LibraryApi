@@ -15,5 +15,16 @@ namespace LibraryApi.Api.Controllers
 			var books = await bookService.GetAllBooksAsync();
 			return Ok(books);
 		}
+
+		[HttpGet("{id:int}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetBookById(int id)
+		{
+			var book = await bookService.GetBookByIdAsync(id);
+			if (book is null)
+				return NotFound();
+			return Ok(book);
+		}
 	}
 }
