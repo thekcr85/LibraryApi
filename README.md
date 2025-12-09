@@ -1,8 +1,8 @@
-# LibraryApi
+﻿# LibraryApi
 
 A clean, modern REST API for managing a library's books and authors, built with .NET 10 and Entity Framework Core following Clean Architecture principles.
 
-## ?? Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 - .NET 10 SDK
@@ -43,7 +43,7 @@ A clean, modern REST API for managing a library's books and authors, built with 
 
 ---
 
-## ?? API Endpoints
+## 📚 API Endpoints
 
 ### Books
 - `GET /api/books` - Get all books
@@ -69,55 +69,125 @@ A clean, modern REST API for managing a library's books and authors, built with 
 
 ---
 
-## ??? Project Structure
+## 🏗️ Project Structure
 
 ```
 LibraryApi/
-??? LibraryApi.Domain/           # Entities & business logic
-??? LibraryApi.Application/      # DTOs, Services, Interfaces
-??? LibraryApi.Infrastructure/   # Database, Repositories
-??? LibraryApi.Api/              # Controllers, Configuration
-??? LibraryApi.UnitTests/        # Unit tests
+├── LibraryApi.Domain/           # Entities & business logic
+├── LibraryApi.Application/      # DTOs, Services, Interfaces
+├── LibraryApi.Infrastructure/   # Database, Repositories
+├── LibraryApi.Api/              # Controllers, Configuration
+└── LibraryApi.UnitTests/        # Unit tests
 ```
 
 ### Clean Architecture
-- **Domain** ? No external dependencies
-- **Application** ? Depends on Domain only
-- **Infrastructure** ? Implements Application interfaces
-- **API** ? Composition root (depends on all)
+- **Domain** → No external dependencies
+- **Application** → Depends on Domain only
+- **Infrastructure** → Implements Application interfaces
+- **API** → Composition root (depends on all)
 
 ---
 
-## ?? Key Features
+## 💡 Key Features
 
-? **Clean Architecture** - Clear separation of concerns  
-? **.NET 10** - Latest language features (primary constructors, records, collection expressions)  
-? **CancellationToken Support** - Proper async/await patterns  
-? **Entity Framework Core 10** - SQL Server integration  
-? **OpenAPI/Swagger** - Auto-generated API documentation  
-? **Audit Trail** - CreatedAt/UpdatedAt timestamps on all entities  
-? **Dependency Injection** - Built-in DI container  
-? **Validation** - Data annotations on DTOs  
+✅ **Clean Architecture** - Clear separation of concerns  
+✅ **.NET 10** - Latest language features (primary constructors, records, collection expressions)  
+✅ **CancellationToken Support** - Proper async/await patterns  
+✅ **Entity Framework Core 10** - SQL Server integration  
+✅ **OpenAPI/Swagger** - Auto-generated API documentation  
+✅ **Audit Trail** - CreatedAt/UpdatedAt timestamps on all entities  
+✅ **Dependency Injection** - Built-in DI container  
+✅ **Validation** - Data annotations on DTOs  
+✅ **Global Exception Handling** - RFC 7807 ProblemDetails error responses
 
 ---
 
-## ?? Example: Create a Book
+## 🛡️ Error Handling
+
+The API implements global exception handling following the **RFC 7807 ProblemDetails** standard for consistent error responses.
+
+### Error Response Format
+
+All errors return a standardized `ProblemDetails` response:
+
+```json
+{
+  "type": "https://httpstatuses.com/404",
+  "title": "Not found",
+  "status": 404,
+  "detail": "Book with ID 999 does not exist.",
+  "instance": "/api/books/999"
+}
+```
+
+### HTTP Status Codes
+
+| Status | Exception | Meaning |
+|--------|-----------|---------|
+| 400 | `ArgumentNullException`, `ArgumentException` | Invalid request parameters |
+| 404 | `KeyNotFoundException` | Resource not found |
+| 409 | `InvalidOperationException` | Invalid operation state |
+| 500 | Other exceptions | Internal server error |
+
+### Development vs. Production
+
+- **Development**: Error `Detail` includes the full exception message for debugging
+- **Production**: Error `Detail` contains a generic message for security (prevents leaking internal details)
+
+### Example Error Responses
+
+**Not Found (404):**
+```json
+{
+  "type": "https://httpstatuses.com/404",
+  "title": "Not found",
+  "status": 404,
+  "detail": "Book with ID 999 does not exist.",
+  "instance": "/api/books/999"
+}
+```
+
+**Invalid Request (400):**
+```json
+{
+  "type": "https://httpstatuses.com/400",
+  "title": "Invalid request",
+  "status": 400,
+  "detail": "One or more required fields are missing.",
+  "instance": "/api/books"
+}
+```
+
+**Internal Server Error (500):**
+```json
+{
+  "type": "https://httpstatuses.com/500",
+  "title": "Internal server error",
+  "status": 500,
+  "detail": null,
+  "instance": "/api/books"
+}
+```
+
+---
+
+## 📝 Example: Create a Book
 
 ```bash
 curl -X POST https://localhost:5001/api/books \
   -H "Content-Type: application/json" \
   -d '{
-    "title": "Clean Code",
-    "description": "A Handbook of Agile Software Craftsmanship",
+    "title": "Misery",
+    "description": "Another terrifying experience",
     "isbn": "0132350882",
-    "publishedDate": "2008-08-01",
+    "publishedDate": "1975-08-01",
     "authorId": 1
   }'
 ```
 
 ---
 
-## ?? Running Tests
+## 🧪 Running Tests
 
 ```bash
 dotnet test LibraryApi.UnitTests
@@ -125,18 +195,18 @@ dotnet test LibraryApi.UnitTests
 
 ---
 
-## ?? Technologies
+## 📦 Technologies
 
 - **Runtime**: .NET 10
 - **Language**: C# 14
 - **Database**: SQL Server + Entity Framework Core 10
 - **API**: ASP.NET Core Web API
 - **Validation**: Data Annotations
-- **Documentation**: OpenAPI/Swagger
+- **Documentation**: OpenAPI/Scalar
 
 ---
 
-## ?? Resources
+## 🔗 Resources
 
 - [.NET 10 Docs](https://learn.microsoft.com/en-us/dotnet/)
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
@@ -145,12 +215,12 @@ dotnet test LibraryApi.UnitTests
 
 ---
 
-## ?? License
+## 📄 License
 
 This project is open source and available under the MIT License.
 
 ---
 
-## ????? Contributing
+## 👨‍💻 Contributing
 
 Feel free to fork and submit pull requests!
