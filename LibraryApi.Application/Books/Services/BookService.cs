@@ -24,7 +24,7 @@ public class BookService(IBookRepository bookRepository) : IBookService
 	public async Task<BookDto?> GetBookByIdAsync(int id, CancellationToken cancellationToken = default)
 	{
 		var book = await bookRepository.GetByIdAsync(id, cancellationToken);
-		return book?.ToDto();
+		return book?.ToDto(); 
 	}
 
 	/// <inheritdoc/>
