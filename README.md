@@ -94,7 +94,7 @@ LibraryApi/
 ✅ **.NET 10** - Latest language features (primary constructors, records, collection expressions)  
 ✅ **CancellationToken Support** - Proper async/await patterns  
 ✅ **Entity Framework Core 10** - SQL Server integration  
-✅ **OpenAPI/Swagger** - Auto-generated API documentation  
+✅ **OpenAPI/Scalar** - Auto-generated API documentation  
 ✅ **Audit Trail** - CreatedAt/UpdatedAt timestamps on all entities  
 ✅ **Dependency Injection** - Built-in DI container  
 ✅ **Validation** - Data annotations on DTOs  
