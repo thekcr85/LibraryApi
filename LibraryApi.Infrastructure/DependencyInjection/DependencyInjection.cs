@@ -1,3 +1,4 @@
+using LibraryApi.Application.Authors.Interfaces.Repositories;
 using LibraryApi.Application.Books.Interfaces.Repositories;
 using LibraryApi.Infrastructure.Persistence;
 using LibraryApi.Infrastructure.Repositories;
@@ -30,6 +31,7 @@ public static class DependencyInjection
 
 		// Register repositories
 		services.AddScoped<IBookRepository, BookRepository>();
+		services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 		return services;
 	}
