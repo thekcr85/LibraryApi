@@ -1,6 +1,6 @@
 ﻿# LibraryApi
 
-A clean, modern REST API for managing a library's books and authors, built with .NET 10 and Entity Framework Core following Clean Architecture principles.
+A clean, modern REST API for managing a library's books and authors, built with .NET 10 and Entity Framework Core following Clean Architecture principles. The project was developed as part of my learning journey, showcasing how I apply Clean Architecture and best practices in .NET.
 
 ## 🚀 Quick Start
 
@@ -216,11 +216,12 @@ dotnet test LibraryApi.UnitTests
 ---
 
 ## 📄 License
-
 This project is open source and available under the MIT License.
 
 ---
-
 ## 👨‍💻 Contributing
-
 Feel free to fork and submit pull requests!
+
+---
+## 🎓 About
+This is an educational project created to practice modern .NET development patterns and demonstrate my skills in building maintainable APIs. Goal of this solution is to learn as much as I can about Clean Architecture pattern. 
